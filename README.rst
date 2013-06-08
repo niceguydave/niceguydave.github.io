@@ -9,6 +9,7 @@ To use this project follow these steps:
 #. Create your working environment
 #. Install Django
 #. Install additional dependencies
+  #. $ pip install -r requirements/local.txt
 
 *note: these instructions show creation of a project called "niceguydave".  You
 should replace this name with the actual name of your project.*
