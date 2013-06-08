@@ -62,20 +62,13 @@ virtualenvwrapper):
     /home/<youruser>/niceguydave/niceguydave/
     import sys; new=sys.path[sys.__plen:]; del sys.path[sys.__plen:]; p=getattr(sys,'__egginsert',0); sys.path[p:p]=new; sys.__egginsert = p+len(new)
 
-Installing Django
-=================
-
-To install Django in the new virtual environment, run the following command::
-
-    $ pip install django
-
 Creating your project
 =====================
 
-To create a new Django project called '**niceguydave**' using
-django-twoscoops-project, run the following command::
+To create a new Django project called '**niceguydave**' and assuming that you 
+have git installed, run the following command:
 
-    $ django-admin.py startproject --template=https://github.com/twoscoops/django-twoscoops-project/archive/master.zip --extension=py,rst,html niceguydave
+    $ git clone git@github.com:niceguydave/niceguydave.git niceguydave
 
 Installation of Dependencies
 =============================
@@ -92,11 +85,3 @@ For production::
 
 *note: We install production requirements this way because many Platforms as a
 Services expect a requirements.txt file in the root of projects.*
-
-Acknowledgements
-================
-
-    - Many thanks to Randall Degges for the inspiration to write the book and django-skel.
-    - All of the contributors_ to this project.
-
-.. _contributors: https://github.com/twoscoops/django-twoscoops-project/blob/master/CONTRIBUTORS.txt
