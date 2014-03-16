@@ -1,4 +1,4 @@
 # Test dependencies go here.
--r base.txt
+-r common.txt
 coverage==3.6
 django-discover-runner==0.4
