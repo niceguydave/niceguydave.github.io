@@ -8,9 +8,6 @@
 *.swp
 *~
 
-# Sphinx docs:
-build
-
 # SQLite3 database files:
 *.db
 
@@ -19,4 +16,9 @@ build
 
 .sass-cache/
 
+# Sublime Text files
 *.sublime-workspace
+
+# Pelican output directory
+cache/
+output/
