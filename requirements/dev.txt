@@ -1,5 +1,0 @@
-# requirements/dev.txt
--r common.txt
-coverage==3.6
-django-discover-runner==1.0
-Sphinx==1.1.3

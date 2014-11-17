@@ -1,6 +1,0 @@
-# requirements/live.txt
--r common.txt
-django-db-pool==0.0.10
-django-redis==3.3
-raven==3.6.0
-newrelic==2.8.0.7
