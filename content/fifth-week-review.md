@@ -1,7 +1,7 @@
 Title: Fifth week: review
 Date: 2011-12-09 12:43
 Author: niceguydave
-Category: German
+Category: Language
 Tags: deutsche welle, goethe, lwt, review
 Slug: fifth-week-review
 

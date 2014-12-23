@@ -1,7 +1,7 @@
 Title: Lang-8
 Date: 2011-11-03 14:39
 Author: niceguydave
-Category: German, Language
+Category: Language
 Tags: Lang-8, teaching
 Slug: lang-8
 

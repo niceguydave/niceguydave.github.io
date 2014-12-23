@@ -1,7 +1,7 @@
 Title: Learning with Deutsche Welle News
 Date: 2011-11-02 12:40
 Author: niceguydave
-Category: German, Language
+Category: Language
 Tags: deutsche welle, german, news
 Slug: learning-with-deutsche-welle-news
 

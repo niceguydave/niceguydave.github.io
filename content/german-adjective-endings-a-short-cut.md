@@ -1,7 +1,7 @@
 Title: German adjective endings - a short cut
 Date: 2014-10-06 19:29
 Author: niceguydave
-Category: German, Language, Learning
+Category: Language
 Tags: adjectives, german, grammar
 Slug: german-adjective-endings-a-short-cut
 

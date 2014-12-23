@@ -1,6 +1,7 @@
 Title: How I learn languages
 Date: 2011-12-29 13:41
 Author: niceguydave
+Category: Language
 Slug: how-i-learn-languages
 
 My current language learning system can be broken down into the
