@@ -35,3 +35,8 @@ DEFAULT_PAGINATION = 10
 #RELATIVE_URLS = True
 
 THEME = 'notmyidea'
+
+GOOGLE_ANALYTICS = 'UA-12339594-2'
+SOCIAL = (('twitter', 'https://twitter.com/niceguydave'),
+          ('lastfm', 'http://www.last.fm/user/squij'),
+          ('github', 'https://github.com/niceguydave'),)
