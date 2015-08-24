@@ -22,3 +22,6 @@
 # Pelican output directory
 cache/
 output/
+
+# PyCharm
+.idea/
