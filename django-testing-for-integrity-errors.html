@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Django - testing model methods</title>
+        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
+        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <nav><ul>
+                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
+                    <li class="active"><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="bookmark"
+           title="Permalink to Django - testing model methods">Django - testing model methods</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-04-25T09:10:00+01:00">
+                Published: Fri 25 April 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/testing.html">testing</a> </p>
+</footer><!-- /.post-info -->      <p>I recently stumbled upon a "gotcha" which may help someone else testing
+Django model methods.</p>
+<p>An overview: I recently found myself in a situation where I needed to
+ensure that the <code>slug</code> field on a model was unique.</p>
+<p>A simplification of the model is as follows:</p>
+<p>[code language="python"]<br />
+from django.db import models</p>
+<p>class Foo(models.Model):<br />
+name = models.CharField(max_length=100)<br />
+slug = models.SlugField(unique=True)<br />
+[/code]</p>
+<p>In terms of how to test this change to the model, my initial thoughts
+were that things should be fairly simple: create an object with a
+specific <code>slug</code> and then create another object with the same <code>slug</code>,
+expecting an <code>IntegrityError</code> to be raised. As such, my approach was to
+write the following:</p>
+<p>[code language="python"]<br />
+from django.db import IntegrityError<br />
+from django.test import TestCase<br />
+from .models import Foo</p>
+<p>class FooModelTest(TestCase):</p>
+<p>def test_unique_slug(self):<br />
+&quot;&quot;&quot;A slug should be unique.<br />
+&quot;&quot;&quot;<br />
+f1 = Foo(name=&quot;Foo1&quot;, slug=&quot;foo1&quot;)<br />
+f1.save()<br />
+f2 = Foo(name=&quot;Foo2&quot;, slug=&quot;foo1&quot;)<br />
+self.assertRaises(IntegrityError, f2.save())<br />
+[/code]</p>
+<p>However, rather than checking that the <code>IntegrityError</code> was being raised
+was being raised, the <code>IntegrityError</code> was called before the test could
+run.</p>
+<p>What had happened was that, rather than passing the <code>save</code> method itself
+to <code>self.assertRaises</code> I was calling <code>save()</code> directly: an
+<code>IntegrityError</code> was being raised before the test had even been run,
+rather than having the test itself check the <code>save</code> method in the
+assertion.</p>
+<p>To fix this, I removed the parentheses from <code>f2.save()</code> i.e.</p>
+<p>[code language="python"]<br />
+...<br />
+self.assertRaises(IntegrityError, f2.save)<br />
+[/code]</p>
+<p>then everything works exactly as expected.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://twitter.com/niceguydave">twitter</a></li>
+                            <li><a href="http://www.last.fm/user/squij">lastfm</a></li>
+                            <li><a href="https://github.com/niceguydave">github</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12339594-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = 'https://ssl.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</body>
+</html>
