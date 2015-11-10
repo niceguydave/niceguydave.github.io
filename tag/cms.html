@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>David Talbot - cms</title>
+        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
+        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <nav><ul>
+                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
+                    <li><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html">Enabling native spell checking with Django-CMS 3</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-09-22T11:54:00+01:00">
+                Published: Mon 22 September 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/cms.html">cms</a> <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/django-cms.html">django-cms</a> </p>
+</footer><!-- /.post-info --><p>We use Django-CMS extensively at the company I work for,
+<a href="http://www.pancentric.com/" title="Pancentric">Pancentric</a>. I was recently
+given what, at first, seemed to be a fairly simple request: ensure that
+any misspelled words are highlighted within the default text editor.</p>
+<p>I'm fairly new to <a href="http://ckeditor.com/" title="CKEditor">CKEditor</a> and
+although I'm liking using it so far, there are a certain number of
+features which make things... awkward. Spell checking is one of them.</p>
+<p>The toolbar has a number of sensible defaults which can be seen in the
+image below.  Notice that, although the last three words are misspelled,
+there is no visual indication of this.</p>
+<p>[caption id="attachment_136" align="alignnone" width="1008"]<a href="http://niceguydave.files.wordpress.com/2014/09/toolbar_pre_config.png"><img alt="Default
+CKEditor
+layout" src="http://niceguydave.files.wordpress.com/2014/09/toolbar_pre_config.png" /></a>
+Default CKEditor layout[/caption]</p>
+<p>You'll notice that what I <em>don't</em> have here is either a spell-check
+button or the ability to see any misspelled words highlighted within the
+text editor itself.</p>
+<p>After digging around for a while, it seemed that many of the
+recommendations for including a spell checker directed me to using a
+licensed plugin, something which I didn't want or need; I just wanted to
+enable the context menu to highlight misspelled words. Moreover, the
+context menu had been hijacked too, which stopped me from right-clicking
+on a word to get a context-specific menu.</p>
+<p>In the end, after a bit of searching and finding some useful posts about
+the same issue (like <a href="http://murfitt.net/blog/getting-browser-spell-checker-work-ckeditor-drupal">this
+one</a>
+and <a href="http://stackoverflow.com/questions/2682042/ckeditor-using-firefox-built-in-spellchecker">this
+one</a>)
+I was able to hack together the following configuration. This sits
+within my <code>settings.py</code> file and gives a minimal working solution which
+allows misspelled words to be highlighted within the text editor and
+which doesn't force me to install any additional spell checking plugins:</p>
+<p>[code language="python"]<br />
+CKEDITOR_SETTINGS = {<br />
+'disableNativeSpellChecker': False,<br />
+'removePlugins': 'contextmenu,liststyle,tabletools',<br />
+'toolbar_CMS': [<br />
+['Undo', 'Redo'],<br />
+['cmsplugins', '-', 'PasteText',],<br />
+['Format', 'NumberedList','BulletedList',],<br />
+['Bold', 'Italic', 'Underline', '-', 'RemoveFormat'],<br />
+['Source', 'ShowBlocks',]<br />
+],<br />
+}<br />
+[/code]</p>
+<p>Some notes on what I've done here:</p>
+<ol>
+<li>By default, <a href="http://docs.ckeditor.com/#!/guide/dev_spellcheck"><code>disableNativeSpellChecker</code> is set to
+    <code>True</code></a>, so I
+    needed to override this behaviour.</li>
+<li>I only actually needed to remove <code>contextmenu</code> from the
+    <code>removePlugins</code> attribute: <code>liststyle</code> and <code>tabletools</code> depend upon
+    <code>contextmenu</code>, so they needed to come out, too.</li>
+<li>The additional <code>'toolbar_CMS'</code> config is not part of the problem
+    above but illustrates how I've reduced the number of tool bar items
+    to a sensible minimum in the image below</li>
+</ol>
+<p>The final appearance of the editor after the changes have been made is
+as below.  Notice the final three nonsense words highlighted as
+misspelled (I'm using Chrome ):</p>
+<p>[caption id="attachment_135" align="alignnone" width="1008"]<a href="http://niceguydave.files.wordpress.com/2014/09/toolbar_post_config.png"><img alt="CKEditor
+toolbar after configuring native browser spell
+checking" src="http://niceguydave.files.wordpress.com/2014/09/toolbar_post_config.png" /></a>
+CKEditor toolbar after configuring native browser spell
+checking[/caption]</p>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://twitter.com/niceguydave">twitter</a></li>
+                            <li><a href="http://www.last.fm/user/squij">lastfm</a></li>
+                            <li><a href="https://github.com/niceguydave">github</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12339594-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = 'https://ssl.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</body>
+</html>

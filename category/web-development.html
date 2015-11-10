@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>David Talbot - Web development</title>
+        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
+        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <nav><ul>
+                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
+                    <li class="active"><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="http://niceguydave.com/unexpected-behaviour-deleting-optional-fields.html">Django - unexpected behaviour when deleting optional fields</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-08-24T11:30:00+01:00">
+                Published: Mon 24 August 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> </p>
+</footer><!-- /.post-info --><p>I've just come out of a situation where data has been deleted from a site
+I'm responsible for - I wasn't expecting this to happen when writing the 
+schema so I thought it worthwhile adding here in the event that it helps
+anyone else who may be in the same situation</p>
+<p>The scenario was adding an optional field to to a Django (
+FilerImageField [http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield]).</p>
+<p>A simplification of my model is as follows:</p>
+<p>[code language="python"]<br />
+from filer.fields.image import FilerImageField
+...</p>
+<p>class Foo(models.Model):<br />
+    name = models.CharField(max_length=100)    <br />
+    image = FilerImageField(null=True, blank=True,
+                            help_text='Image should be at least 200 x 100px.')</p>
+<p>[/code]</p>
+<p>My initial thoughts on this were, "it's an optional field so it shouldn't 
+matter whether the <code>image</code> instance referred to is deleted from the library.</p>
+<p>It does.</p>
+<p>When deleting anything, the default behaviour of any foreign keys 
+<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete">'emulates the behavior of the SQL constraint ON DELETE 
+CASCADE'</a>, 
+which is to say, even though an <code>image</code> exists in an instance of <code>Foo</code>, 
+and is optional, the fact that it has a foreign key relationship to the
+<code>FilerImageField</code> instance means that the <code>Foo</code> instance will, be default,
+ be deleted.</p>
+<p>To resolve this issue, in my case, I changed the <code>on_delete</code> attribute for my
+<code>image</code> field to set the value of <code>image</code> to be
+[<code>NULL</code> (https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL)] 
+in the event that the connected <code>FilerFieldImage</code> field were deleted.</p>
+<p>The code therefore was rewritten to look as follows:</p>
+<p>[code language="python"]<br />
+from filer.fields.image import FilerImageField
+...</p>
+<p>class Foo(models.Model):<br />
+    name = models.CharField(max_length=100)    <br />
+    image = FilerImageField(null=True, blank=True,
+                            help_text='Image should be at least 200 x 100px.',
+                            on_delete=models.SET_NULL)</p>
+<p>[/code]</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://niceguydave.com/resetting-a-django-app-managed-by-south.html" rel="bookmark"
+                           title="Permalink to Resetting a Django app managed by South">Resetting a Django app managed by South</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-10-04T10:40:00+01:00">
+                Published: Sat 04 October 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/south.html">south</a> </p>
+</footer><!-- /.post-info -->                <p>I'm currently working on a Django 1.6 project. The project is still in
+the early phases of development and I have the luxury of being able to
+be fairly destructive when it comes to dropping models and repopulating
+data etc.</p>
+<p>Before too long, however, I'll have to ...</p>
+                <a class="readmore" href="http://niceguydave.com/resetting-a-django-app-managed-by-south.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html" rel="bookmark"
+                           title="Permalink to Enabling native spell checking with Django-CMS 3">Enabling native spell checking with Django-CMS 3</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-09-22T11:54:00+01:00">
+                Published: Mon 22 September 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/cms.html">cms</a> <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/django-cms.html">django-cms</a> </p>
+</footer><!-- /.post-info -->                <p>We use Django-CMS extensively at the company I work for,
+<a href="http://www.pancentric.com/" title="Pancentric">Pancentric</a>. I was recently
+given what, at first, seemed to be a fairly simple request: ensure that
+any misspelled words are highlighted within the default text editor.</p>
+<p>I'm fairly new to <a href="http://ckeditor.com/" title="CKEditor">CKEditor</a> and
+although I'm liking using it ...</p>
+                <a class="readmore" href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="bookmark"
+                           title="Permalink to Django - testing model methods">Django - testing model methods</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-04-25T09:10:00+01:00">
+                Published: Fri 25 April 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+        </address>
+<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/testing.html">testing</a> </p>
+</footer><!-- /.post-info -->                <p>I recently stumbled upon a "gotcha" which may help someone else testing
+Django model methods.</p>
+<p>An overview: I recently found myself in a situation where I needed to
+ensure that the <code>slug</code> field on a model was unique.</p>
+<p>A simplification of the model is as follows:</p>
+<p>[code language="python"]<br />
+from ...</p>
+                <a class="readmore" href="http://niceguydave.com/django-testing-for-integrity-errors.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                            <li><a href="https://twitter.com/niceguydave">twitter</a></li>
+                            <li><a href="http://www.last.fm/user/squij">lastfm</a></li>
+                            <li><a href="https://github.com/niceguydave">github</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-12339594-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = 'https://ssl.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+</body>
+</html>
