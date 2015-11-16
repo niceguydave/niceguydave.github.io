@@ -19,15 +19,15 @@ anyone else who may be in the same situation&lt;/p&gt;
 matter whether the &lt;code&gt;image&lt;/code&gt; instance referred to is deleted from the library.&lt;/p&gt;
 &lt;p&gt;It does.&lt;/p&gt;
 &lt;p&gt;When deleting anything, the default behaviour of any foreign keys 
-&lt;a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete"&gt;'emulates the behavior of the SQL constraint ON DELETE 
-CASCADE'&lt;/a&gt;, 
+&lt;a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete"&gt;emulates the behavior of the SQL constraint ON DELETE 
+CASCADE&lt;/a&gt;, 
 which is to say, even though an &lt;code&gt;image&lt;/code&gt; exists in an instance of &lt;code&gt;Foo&lt;/code&gt;, 
 and is optional, the fact that it has a foreign key relationship to the
 &lt;code&gt;FilerImageField&lt;/code&gt; instance means that the &lt;code&gt;Foo&lt;/code&gt; instance will, be default,
  be deleted.&lt;/p&gt;
 &lt;p&gt;To resolve this issue, in my case, I changed the &lt;code&gt;on_delete&lt;/code&gt; attribute for my
 &lt;code&gt;image&lt;/code&gt; field to set the value of &lt;code&gt;image&lt;/code&gt; to be
-&lt;a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL"&gt;&lt;code&gt;NULL&lt;/code&gt;&lt;/a&gt; in the event that the 
+&lt;a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL"&gt;NULL&lt;/a&gt; in the event that the 
 connected &lt;code&gt;FilerFieldImage&lt;/code&gt; field were deleted.&lt;/p&gt;
 &lt;p&gt;The code therefore was rewritten to look as follows:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;filer.fields.image&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;FilerImageField&lt;/span&gt;

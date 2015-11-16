@@ -58,15 +58,15 @@ anyone else who may be in the same situation</p>
 matter whether the <code>image</code> instance referred to is deleted from the library.</p>
 <p>It does.</p>
 <p>When deleting anything, the default behaviour of any foreign keys 
-<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete">'emulates the behavior of the SQL constraint ON DELETE 
-CASCADE'</a>, 
+<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete">emulates the behavior of the SQL constraint ON DELETE 
+CASCADE</a>, 
 which is to say, even though an <code>image</code> exists in an instance of <code>Foo</code>, 
 and is optional, the fact that it has a foreign key relationship to the
 <code>FilerImageField</code> instance means that the <code>Foo</code> instance will, be default,
  be deleted.</p>
 <p>To resolve this issue, in my case, I changed the <code>on_delete</code> attribute for my
 <code>image</code> field to set the value of <code>image</code> to be
-<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL"><code>NULL</code></a> in the event that the 
+<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL">NULL</a> in the event that the 
 connected <code>FilerFieldImage</code> field were deleted.</p>
 <p>The code therefore was rewritten to look as follows:</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
