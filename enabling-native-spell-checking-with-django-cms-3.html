@@ -70,10 +70,10 @@ I was able to hack together the following configuration. This sits
 within my <code>settings.py</code> file and gives a minimal working solution which
 allows misspelled words to be highlighted within the text editor and
 which doesn't force me to install any additional spell checking plugins:</p>
-<div class="highlight"><pre>CKEDITOR\_SETTINGS = {  
+<div class="highlight"><pre>CKEDITOR_SETTINGS = {  
     &#39;disableNativeSpellChecker&#39;: False,  
     &#39;removePlugins&#39;: &#39;contextmenu,liststyle,tabletools&#39;,  
-    &#39;toolbar\_CMS&#39;: [  
+    &#39;toolbar_CMS&#39;: [  
         [&#39;Undo&#39;, &#39;Redo&#39;],  
         [&#39;cmsplugins&#39;, &#39;-&#39;, &#39;PasteText&#39;,],  
         [&#39;Format&#39;, &#39;NumberedList&#39;,&#39;BulletedList&#39;,],  

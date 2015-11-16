@@ -3,8 +3,7 @@
 I'm responsible for - I wasn't expecting this to happen when writing the 
 schema so I thought it worthwhile adding here in the event that it helps
 anyone else who may be in the same situation&lt;/p&gt;
-&lt;p&gt;The scenario was adding an optional field to to a Django (
-FilerImageField [http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield]).&lt;/p&gt;
+&lt;p&gt;The scenario was adding an optional field to to a Django &lt;a href="http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield"&gt;FilerImageField&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;A simplification of my model is as follows:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;filer.fields.image&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;FilerImageField&lt;/span&gt;
 &lt;span class="o"&gt;...&lt;/span&gt;
@@ -28,8 +27,8 @@ and is optional, the fact that it has a foreign key relationship to the
  be deleted.&lt;/p&gt;
 &lt;p&gt;To resolve this issue, in my case, I changed the &lt;code&gt;on_delete&lt;/code&gt; attribute for my
 &lt;code&gt;image&lt;/code&gt; field to set the value of &lt;code&gt;image&lt;/code&gt; to be
-[&lt;code&gt;NULL&lt;/code&gt; (https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL)] 
-in the event that the connected &lt;code&gt;FilerFieldImage&lt;/code&gt; field were deleted.&lt;/p&gt;
+&lt;a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL"&gt;&lt;code&gt;NULL&lt;/code&gt;&lt;/a&gt; in the event that the 
+connected &lt;code&gt;FilerFieldImage&lt;/code&gt; field were deleted.&lt;/p&gt;
 &lt;p&gt;The code therefore was rewritten to look as follows:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;filer.fields.image&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;FilerImageField&lt;/span&gt;
 &lt;span class="o"&gt;...&lt;/span&gt;
@@ -113,10 +112,10 @@ I was able to hack together the following configuration. This sits
 within my &lt;code&gt;settings.py&lt;/code&gt; file and gives a minimal working solution which
 allows misspelled words to be highlighted within the text editor and
 which doesn't force me to install any additional spell checking plugins:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;CKEDITOR\_SETTINGS = {  
+&lt;div class="highlight"&gt;&lt;pre&gt;CKEDITOR_SETTINGS = {  
     &amp;#39;disableNativeSpellChecker&amp;#39;: False,  
     &amp;#39;removePlugins&amp;#39;: &amp;#39;contextmenu,liststyle,tabletools&amp;#39;,  
-    &amp;#39;toolbar\_CMS&amp;#39;: [  
+    &amp;#39;toolbar_CMS&amp;#39;: [  
         [&amp;#39;Undo&amp;#39;, &amp;#39;Redo&amp;#39;],  
         [&amp;#39;cmsplugins&amp;#39;, &amp;#39;-&amp;#39;, &amp;#39;PasteText&amp;#39;,],  
         [&amp;#39;Format&amp;#39;, &amp;#39;NumberedList&amp;#39;,&amp;#39;BulletedList&amp;#39;,],  

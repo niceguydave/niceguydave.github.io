@@ -42,8 +42,7 @@
 I'm responsible for - I wasn't expecting this to happen when writing the 
 schema so I thought it worthwhile adding here in the event that it helps
 anyone else who may be in the same situation</p>
-<p>The scenario was adding an optional field to to a Django (
-FilerImageField [http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield]).</p>
+<p>The scenario was adding an optional field to to a Django <a href="http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield">FilerImageField</a>.</p>
 <p>A simplification of my model is as follows:</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
 <span class="o">...</span>
@@ -67,8 +66,8 @@ and is optional, the fact that it has a foreign key relationship to the
  be deleted.</p>
 <p>To resolve this issue, in my case, I changed the <code>on_delete</code> attribute for my
 <code>image</code> field to set the value of <code>image</code> to be
-[<code>NULL</code> (https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL)] 
-in the event that the connected <code>FilerFieldImage</code> field were deleted.</p>
+<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL"><code>NULL</code></a> in the event that the 
+connected <code>FilerFieldImage</code> field were deleted.</p>
 <p>The code therefore was rewritten to look as follows:</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
 <span class="o">...</span>
