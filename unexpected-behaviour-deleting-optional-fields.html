@@ -3,8 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Django - unexpected behaviour when deleting optional fields</title>
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+        <link rel="stylesheet" href="http://niceguydave.github.io/theme/css/main.css" />
+        <link href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,17 +13,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <h1><a href="http://niceguydave.github.io/">David Talbot </a></h1>
                 <nav><ul>
-                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
-                    <li class="active"><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                    <li><a href="http://niceguydave.github.io/category/language.html">Language</a></li>
+                    <li class="active"><a href="http://niceguydave.github.io/category/web-development.html">Web development</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="http://niceguydave.com/unexpected-behaviour-deleting-optional-fields.html" rel="bookmark"
+        <a href="http://niceguydave.github.io/unexpected-behaviour-deleting-optional-fields.html" rel="bookmark"
            title="Permalink to Django - unexpected behaviour when deleting optional fields">Django - unexpected behaviour when deleting optional fields</a></h1>
     </header>
 
@@ -34,10 +34,10 @@
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/django.html">django</a> </p>
 </footer><!-- /.post-info -->      <p>I've just come out of a situation where data has been deleted from a site
 I'm responsible for - I wasn't expecting this to happen when writing the 
 schema so I thought it worthwhile adding here in the event that it helps
@@ -45,14 +45,16 @@ anyone else who may be in the same situation</p>
 <p>The scenario was adding an optional field to to a Django (
 FilerImageField [http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield]).</p>
 <p>A simplification of my model is as follows:</p>
-<p>[code language="python"]<br />
-from filer.fields.image import FilerImageField
-...</p>
-<p>class Foo(models.Model):<br />
-    name = models.CharField(max_length=100)    <br />
-    image = FilerImageField(null=True, blank=True,
-                            help_text='Image should be at least 200 x 100px.')</p>
-<p>[/code]</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>      
+    <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">)</span>
+</pre></div>
+
+
 <p>My initial thoughts on this were, "it's an optional field so it shouldn't 
 matter whether the <code>image</code> instance referred to is deleted from the library.</p>
 <p>It does.</p>
@@ -68,15 +70,15 @@ and is optional, the fact that it has a foreign key relationship to the
 [<code>NULL</code> (https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL)] 
 in the event that the connected <code>FilerFieldImage</code> field were deleted.</p>
 <p>The code therefore was rewritten to look as follows:</p>
-<p>[code language="python"]<br />
-from filer.fields.image import FilerImageField
-...</p>
-<p>class Foo(models.Model):<br />
-    name = models.CharField(max_length=100)    <br />
-    image = FilerImageField(null=True, blank=True,
-                            help_text='Image should be at least 200 x 100px.',
-                            on_delete=models.SET_NULL)</p>
-<p>[/code]</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>      
+    <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">,</span>
+                            <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">)</span>
+</pre></div>
     </div><!-- /.entry-content -->
 
   </article>
@@ -94,7 +96,7 @@ from filer.fields.image import FilerImageField
                 <div class="social">
                         <h2>social</h2>
                         <ul>
-                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            <li><a href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://twitter.com/niceguydave">twitter</a></li>
                             <li><a href="http://www.last.fm/user/squij">lastfm</a></li>

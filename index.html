@@ -3,8 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>David Talbot</title>
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+        <link rel="stylesheet" href="http://niceguydave.github.io/theme/css/main.css" />
+        <link href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,26 +13,26 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <h1><a href="http://niceguydave.github.io/">David Talbot </a></h1>
                 <nav><ul>
-                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
-                    <li><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                    <li><a href="http://niceguydave.github.io/category/language.html">Language</a></li>
+                    <li><a href="http://niceguydave.github.io/category/web-development.html">Web development</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="http://niceguydave.com/unexpected-behaviour-deleting-optional-fields.html">Django - unexpected behaviour when deleting optional fields</a></h1>
+                    <h1 class="entry-title"><a href="http://niceguydave.github.io/unexpected-behaviour-deleting-optional-fields.html">Django - unexpected behaviour when deleting optional fields</a></h1>
 <footer class="post-info">
         <abbr class="published" title="2015-08-24T11:30:00+01:00">
                 Published: Mon 24 August 2015
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/django.html">django</a> </p>
 </footer><!-- /.post-info --><p>I've just come out of a situation where data has been deleted from a site
 I'm responsible for - I wasn't expecting this to happen when writing the 
 schema so I thought it worthwhile adding here in the event that it helps
@@ -40,14 +40,16 @@ anyone else who may be in the same situation</p>
 <p>The scenario was adding an optional field to to a Django (
 FilerImageField [http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield]).</p>
 <p>A simplification of my model is as follows:</p>
-<p>[code language="python"]<br />
-from filer.fields.image import FilerImageField
-...</p>
-<p>class Foo(models.Model):<br />
-    name = models.CharField(max_length=100)    <br />
-    image = FilerImageField(null=True, blank=True,
-                            help_text='Image should be at least 200 x 100px.')</p>
-<p>[/code]</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>      
+    <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">)</span>
+</pre></div>
+
+
 <p>My initial thoughts on this were, "it's an optional field so it shouldn't 
 matter whether the <code>image</code> instance referred to is deleted from the library.</p>
 <p>It does.</p>
@@ -63,15 +65,15 @@ and is optional, the fact that it has a foreign key relationship to the
 [<code>NULL</code> (https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL)] 
 in the event that the connected <code>FilerFieldImage</code> field were deleted.</p>
 <p>The code therefore was rewritten to look as follows:</p>
-<p>[code language="python"]<br />
-from filer.fields.image import FilerImageField
-...</p>
-<p>class Foo(models.Model):<br />
-    name = models.CharField(max_length=100)    <br />
-    image = FilerImageField(null=True, blank=True,
-                            help_text='Image should be at least 200 x 100px.',
-                            on_delete=models.SET_NULL)</p>
-<p>[/code]</p>                </article>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+<span class="o">...</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>      
+    <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">,</span>
+                            <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">)</span>
+</pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
@@ -80,7 +82,7 @@ from filer.fields.image import FilerImageField
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/german-adjective-endings-a-short-cut.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/german-adjective-endings-a-short-cut.html" rel="bookmark"
                            title="Permalink to German adjective endings - a short cut">German adjective endings - a short cut</a></h1>
                 </header>
 
@@ -91,21 +93,21 @@ from filer.fields.image import FilerImageField
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/adjectives.html">adjectives</a> <a href="http://niceguydave.com/tag/german.html">german</a> <a href="http://niceguydave.com/tag/grammar.html">grammar</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/adjectives.html">adjectives</a> <a href="http://niceguydave.github.io/tag/german.html">german</a> <a href="http://niceguydave.github.io/tag/grammar.html">grammar</a> </p>
 </footer><!-- /.post-info -->                <p>I can never get my head around the proper way to decline German
 adjectives.  In conversation, I tend to just rush through things without
 worrying too much about grammatical accuracy but if I want to improve my
 written language it's going to be pretty vital to find a quick ...</p>
-                <a class="readmore" href="http://niceguydave.com/german-adjective-endings-a-short-cut.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/german-adjective-endings-a-short-cut.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/resetting-a-django-app-managed-by-south.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/resetting-a-django-app-managed-by-south.html" rel="bookmark"
                            title="Permalink to Resetting a Django app managed by South">Resetting a Django app managed by South</a></h1>
                 </header>
 
@@ -116,22 +118,22 @@ written language it's going to be pretty vital to find a quick ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/south.html">south</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/django.html">django</a> <a href="http://niceguydave.github.io/tag/south.html">south</a> </p>
 </footer><!-- /.post-info -->                <p>I'm currently working on a Django 1.6 project. The project is still in
 the early phases of development and I have the luxury of being able to
 be fairly destructive when it comes to dropping models and repopulating
 data etc.</p>
 <p>Before too long, however, I'll have to ...</p>
-                <a class="readmore" href="http://niceguydave.com/resetting-a-django-app-managed-by-south.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/resetting-a-django-app-managed-by-south.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/enabling-native-spell-checking-with-django-cms-3.html" rel="bookmark"
                            title="Permalink to Enabling native spell checking with Django-CMS 3">Enabling native spell checking with Django-CMS 3</a></h1>
                 </header>
 
@@ -142,23 +144,23 @@ data etc.</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/cms.html">cms</a> <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/django-cms.html">django-cms</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/cms.html">cms</a> <a href="http://niceguydave.github.io/tag/django.html">django</a> <a href="http://niceguydave.github.io/tag/django-cms.html">django-cms</a> </p>
 </footer><!-- /.post-info -->                <p>We use Django-CMS extensively at the company I work for,
 <a href="http://www.pancentric.com/" title="Pancentric">Pancentric</a>. I was recently
 given what, at first, seemed to be a fairly simple request: ensure that
 any misspelled words are highlighted within the default text editor.</p>
 <p>I'm fairly new to <a href="http://ckeditor.com/" title="CKEditor">CKEditor</a> and
 although I'm liking using it ...</p>
-                <a class="readmore" href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/enabling-native-spell-checking-with-django-cms-3.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/django-testing-for-integrity-errors.html" rel="bookmark"
                            title="Permalink to Django - testing model methods">Django - testing model methods</a></h1>
                 </header>
 
@@ -169,24 +171,23 @@ although I'm liking using it ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/testing.html">testing</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/django.html">django</a> <a href="http://niceguydave.github.io/tag/testing.html">testing</a> </p>
 </footer><!-- /.post-info -->                <p>I recently stumbled upon a "gotcha" which may help someone else testing
 Django model methods.</p>
 <p>An overview: I recently found myself in a situation where I needed to
 ensure that the <code>slug</code> field on a model was unique.</p>
 <p>A simplification of the model is as follows:</p>
-<p>[code language="python"]<br />
-from ...</p>
-                <a class="readmore" href="http://niceguydave.com/django-testing-for-integrity-errors.html">read more</a>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import ...</span></pre></div>
+                <a class="readmore" href="http://niceguydave.github.io/django-testing-for-integrity-errors.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/working-knowledge.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/working-knowledge.html" rel="bookmark"
                            title="Permalink to My definition of working knowledge of a language">My definition of working knowledge of a language</a></h1>
                 </header>
 
@@ -197,21 +198,21 @@ from ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/goals.html">goals</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/goals.html">goals</a> </p>
 </footer><!-- /.post-info -->                <p>A couple of days ago I was sat in a restaurant in Berlin in the midst of
 an enjoyable German conversation, able to understand enough of what was
 being said to make me realise that I'd reached a very important goal -
 my German had reached a level where I ...</p>
-                <a class="readmore" href="http://niceguydave.com/working-knowledge.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/working-knowledge.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/learning-teaching.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/learning-teaching.html" rel="bookmark"
                            title="Permalink to Learning, teaching.">Learning, teaching.</a></h1>
                 </header>
 
@@ -222,22 +223,22 @@ my German had reached a level where I ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/learning.html">learning</a> <a href="http://niceguydave.com/tag/teaching.html">teaching</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/learning.html">learning</a> <a href="http://niceguydave.github.io/tag/teaching.html">teaching</a> </p>
 </footer><!-- /.post-info -->                <p>Just back from a fantastic week in Hamburg and Berlin - Christmas with
 my wife's family.  In terms of seeing how my German language learning is
 progressing it was a <em>massive</em> confidence boost - I was able to sit
 within groups of native speakers without anyone offering to speak in
 English ...</p>
-                <a class="readmore" href="http://niceguydave.com/learning-teaching.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/learning-teaching.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/how-i-learn-languages.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/how-i-learn-languages.html" rel="bookmark"
                            title="Permalink to How I learn languages">How I learn languages</a></h1>
                 </header>
 
@@ -248,9 +249,9 @@ English ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
 
 </footer><!-- /.post-info -->                <p>My current language learning system can be broken down into the
 following steps:</p>
@@ -266,13 +267,13 @@ following steps:</p>
 <h2>LWT (Learning With Texts)</h2>
 <p>The <a href="http://lwt.sourceforge.net/" title="Learning With Texts">Learning With
 Texts</a> project allows ...</p>
-                <a class="readmore" href="http://niceguydave.com/how-i-learn-languages.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/how-i-learn-languages.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/unplugged-language-learning.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/unplugged-language-learning.html" rel="bookmark"
                            title="Permalink to Unplugged language learning">Unplugged language learning</a></h1>
                 </header>
 
@@ -283,21 +284,21 @@ Texts</a> project allows ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/children.html">children</a> <a href="http://niceguydave.com/tag/dictaphone.html">dictaphone</a> <a href="http://niceguydave.com/tag/podcast.html">podcast</a> <a href="http://niceguydave.com/tag/recording.html">recording</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/children.html">children</a> <a href="http://niceguydave.github.io/tag/dictaphone.html">dictaphone</a> <a href="http://niceguydave.github.io/tag/podcast.html">podcast</a> <a href="http://niceguydave.github.io/tag/recording.html">recording</a> </p>
 </footer><!-- /.post-info -->                <p>I'm off tomorrow to spend Christmas in Hamburg and Berlin, which will
 mean a week of not being plugged in to the various digital
 <em>accoutrements</em> which I've so busily been tethering myself to over the
 last few weeks.  I thought it worth the while to fire up a ...</p>
-                <a class="readmore" href="http://niceguydave.com/unplugged-language-learning.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/unplugged-language-learning.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="http://niceguydave.com/fifth-week-review.html" rel="bookmark"
+                    <h1><a href="http://niceguydave.github.io/fifth-week-review.html" rel="bookmark"
                            title="Permalink to Fifth week: review">Fifth week: review</a></h1>
                 </header>
 
@@ -308,22 +309,22 @@ last few weeks.  I thought it worth the while to fire up a ...</p>
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/language.html">Language</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/deutsche-welle.html">deutsche welle</a> <a href="http://niceguydave.com/tag/goethe.html">goethe</a> <a href="http://niceguydave.com/tag/lwt.html">lwt</a> <a href="http://niceguydave.com/tag/review.html">review</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/language.html">Language</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/deutsche-welle.html">deutsche welle</a> <a href="http://niceguydave.github.io/tag/goethe.html">goethe</a> <a href="http://niceguydave.github.io/tag/lwt.html">lwt</a> <a href="http://niceguydave.github.io/tag/review.html">review</a> </p>
 </footer><!-- /.post-info -->                <p>It's been a difficult three weeks in terms of focussing on German.  My
 father died suddenly and unexpectedly.  This obviously
 threw <em>everything</em> into turmoil, not just my German learning. Not an
 easy time to focus on anything, to be honest.</p>
 <p>Still... I'm back at work now, which has ...</p>
-                <a class="readmore" href="http://niceguydave.com/fifth-week-review.html">read more</a>
+                <a class="readmore" href="http://niceguydave.github.io/fifth-week-review.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
                 </ol><!-- /#posts-list -->
 <p class="paginator">
     Page 1 / 3
-        <a href="http://niceguydave.com/index2.html">&raquo;</a>
+        <a href="http://niceguydave.github.io/index2.html">&raquo;</a>
 </p>
                 </section><!-- /#content -->
         <section id="extras" class="body">
@@ -339,7 +340,7 @@ easy time to focus on anything, to be honest.</p>
                 <div class="social">
                         <h2>social</h2>
                         <ul>
-                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            <li><a href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://twitter.com/niceguydave">twitter</a></li>
                             <li><a href="http://www.last.fm/user/squij">lastfm</a></li>

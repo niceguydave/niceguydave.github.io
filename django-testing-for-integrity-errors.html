@@ -3,8 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Django - testing model methods</title>
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+        <link rel="stylesheet" href="http://niceguydave.github.io/theme/css/main.css" />
+        <link href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,17 +13,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <h1><a href="http://niceguydave.github.io/">David Talbot </a></h1>
                 <nav><ul>
-                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
-                    <li class="active"><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                    <li><a href="http://niceguydave.github.io/category/language.html">Language</a></li>
+                    <li class="active"><a href="http://niceguydave.github.io/category/web-development.html">Web development</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="bookmark"
+        <a href="http://niceguydave.github.io/django-testing-for-integrity-errors.html" rel="bookmark"
            title="Permalink to Django - testing model methods">Django - testing model methods</a></h1>
     </header>
 
@@ -34,39 +34,44 @@
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/testing.html">testing</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/django.html">django</a> <a href="http://niceguydave.github.io/tag/testing.html">testing</a> </p>
 </footer><!-- /.post-info -->      <p>I recently stumbled upon a "gotcha" which may help someone else testing
 Django model methods.</p>
 <p>An overview: I recently found myself in a situation where I needed to
 ensure that the <code>slug</code> field on a model was unique.</p>
 <p>A simplification of the model is as follows:</p>
-<p>[code language="python"]<br />
-from django.db import models</p>
-<p>class Foo(models.Model):<br />
-name = models.CharField(max_length=100)<br />
-slug = models.SlugField(unique=True)<br />
-[/code]</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
+<span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="nb">max</span>\<span class="n">_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  
+<span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  
+</pre></div>
+
+
 <p>In terms of how to test this change to the model, my initial thoughts
 were that things should be fairly simple: create an object with a
 specific <code>slug</code> and then create another object with the same <code>slug</code>,
 expecting an <code>IntegrityError</code> to be raised. As such, my approach was to
 write the following:</p>
-<p>[code language="python"]<br />
-from django.db import IntegrityError<br />
-from django.test import TestCase<br />
-from .models import Foo</p>
-<p>class FooModelTest(TestCase):</p>
-<p>def test_unique_slug(self):<br />
-&quot;&quot;&quot;A slug should be unique.<br />
-&quot;&quot;&quot;<br />
-f1 = Foo(name=&quot;Foo1&quot;, slug=&quot;foo1&quot;)<br />
-f1.save()<br />
-f2 = Foo(name=&quot;Foo2&quot;, slug=&quot;foo1&quot;)<br />
-self.assertRaises(IntegrityError, f2.save())<br />
-[/code]</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>  
+<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>  
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Foo</span>
+
+<span class="k">class</span> <span class="nc">FooModelTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_unique_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
+    <span class="sd">&quot;&quot;&quot;A slug should be unique.  </span>
+<span class="sd">    &quot;&quot;&quot;</span>  
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Foo1&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;foo1&quot;</span><span class="p">)</span>  
+    <span class="n">f1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Foo2&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;foo1&quot;</span><span class="p">)</span>  
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="n">f2</span><span class="o">.</span><span class="n">save</span><span class="p">())</span>  
+</pre></div>
+
+
 <p>However, rather than checking that the <code>IntegrityError</code> was being raised
 was being raised, the <code>IntegrityError</code> was called before the test could
 run.</p>
@@ -76,10 +81,11 @@ to <code>self.assertRaises</code> I was calling <code>save()</code> directly: an
 rather than having the test itself check the <code>save</code> method in the
 assertion.</p>
 <p>To fix this, I removed the parentheses from <code>f2.save()</code> i.e.</p>
-<p>[code language="python"]<br />
-...<br />
-self.assertRaises(IntegrityError, f2.save)<br />
-[/code]</p>
+<div class="highlight"><pre>...  
+self.assertRaises(IntegrityError, f2.save)  
+</pre></div>
+
+
 <p>then everything works exactly as expected.</p>
     </div><!-- /.entry-content -->
 
@@ -98,7 +104,7 @@ self.assertRaises(IntegrityError, f2.save)<br />
                 <div class="social">
                         <h2>social</h2>
                         <ul>
-                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            <li><a href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://twitter.com/niceguydave">twitter</a></li>
                             <li><a href="http://www.last.fm/user/squij">lastfm</a></li>

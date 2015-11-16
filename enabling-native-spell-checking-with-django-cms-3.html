@@ -3,8 +3,8 @@
 <head>
         <meta charset="utf-8" />
         <title>Enabling native spell checking with Django-CMS 3</title>
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
+        <link rel="stylesheet" href="http://niceguydave.github.io/theme/css/main.css" />
+        <link href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
 
         <!--[if IE]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -13,17 +13,17 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
+                <h1><a href="http://niceguydave.github.io/">David Talbot </a></h1>
                 <nav><ul>
-                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
-                    <li class="active"><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
+                    <li><a href="http://niceguydave.github.io/category/language.html">Language</a></li>
+                    <li class="active"><a href="http://niceguydave.github.io/category/web-development.html">Web development</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
     <header>
       <h1 class="entry-title">
-        <a href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html" rel="bookmark"
+        <a href="http://niceguydave.github.io/enabling-native-spell-checking-with-django-cms-3.html" rel="bookmark"
            title="Permalink to Enabling native spell checking with Django-CMS 3">Enabling native spell checking with Django-CMS 3</a></h1>
     </header>
 
@@ -34,10 +34,10 @@
         </abbr>
 
         <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
+                By                         <a class="url fn" href="http://niceguydave.github.io/author/niceguydave.html">niceguydave</a>
         </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/cms.html">cms</a> <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/django-cms.html">django-cms</a> </p>
+<p>In <a href="http://niceguydave.github.io/category/web-development.html">Web development</a>.</p>
+<p>tags: <a href="http://niceguydave.github.io/tag/cms.html">cms</a> <a href="http://niceguydave.github.io/tag/django.html">django</a> <a href="http://niceguydave.github.io/tag/django-cms.html">django-cms</a> </p>
 </footer><!-- /.post-info -->      <p>We use Django-CMS extensively at the company I work for,
 <a href="http://www.pancentric.com/" title="Pancentric">Pancentric</a>. I was recently
 given what, at first, seemed to be a fairly simple request: ensure that
@@ -70,19 +70,20 @@ I was able to hack together the following configuration. This sits
 within my <code>settings.py</code> file and gives a minimal working solution which
 allows misspelled words to be highlighted within the text editor and
 which doesn't force me to install any additional spell checking plugins:</p>
-<p>[code language="python"]<br />
-CKEDITOR_SETTINGS = {<br />
-'disableNativeSpellChecker': False,<br />
-'removePlugins': 'contextmenu,liststyle,tabletools',<br />
-'toolbar_CMS': [<br />
-['Undo', 'Redo'],<br />
-['cmsplugins', '-', 'PasteText',],<br />
-['Format', 'NumberedList','BulletedList',],<br />
-['Bold', 'Italic', 'Underline', '-', 'RemoveFormat'],<br />
-['Source', 'ShowBlocks',]<br />
-],<br />
-}<br />
-[/code]</p>
+<div class="highlight"><pre>CKEDITOR\_SETTINGS = {  
+    &#39;disableNativeSpellChecker&#39;: False,  
+    &#39;removePlugins&#39;: &#39;contextmenu,liststyle,tabletools&#39;,  
+    &#39;toolbar\_CMS&#39;: [  
+        [&#39;Undo&#39;, &#39;Redo&#39;],  
+        [&#39;cmsplugins&#39;, &#39;-&#39;, &#39;PasteText&#39;,],  
+        [&#39;Format&#39;, &#39;NumberedList&#39;,&#39;BulletedList&#39;,],  
+        [&#39;Bold&#39;, &#39;Italic&#39;, &#39;Underline&#39;, &#39;-&#39;, &#39;RemoveFormat&#39;],  
+        [&#39;Source&#39;, &#39;ShowBlocks&#39;,]  
+    ],  
+}  
+</pre></div>
+
+
 <p>Some notes on what I've done here:</p>
 <ol>
 <li>By default, <a href="http://docs.ckeditor.com/#!/guide/dev_spellcheck"><code>disableNativeSpellChecker</code> is set to
@@ -120,7 +121,7 @@ checking[/caption]</p>
                 <div class="social">
                         <h2>social</h2>
                         <ul>
-                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                            <li><a href="http://niceguydave.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
                             <li><a href="https://twitter.com/niceguydave">twitter</a></li>
                             <li><a href="http://www.last.fm/user/squij">lastfm</a></li>
