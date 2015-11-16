@@ -100,7 +100,7 @@ data population script. I'll outline the way I do this in a future post.&lt;/p&g
 &lt;p&gt;I know that nothing of what I've written above is new in any way; I
 thought it would simply be useful to lay out my process in a clear way.
 Hopefully it may help someone out.&lt;/p&gt;</summary><category term="django"></category><category term="south"></category></entry><entry><title>Enabling native spell checking with Django-CMS 3</title><link href="http://niceguydave.com/enabling-native-spell-checking-with-django-cms-3.html" rel="alternate"></link><updated>2014-09-22T11:54:00+01:00</updated><author><name>niceguydave</name></author><id>tag:niceguydave.com,2014-09-22:enabling-native-spell-checking-with-django-cms-3.html</id><summary type="html">&lt;p&gt;We use Django-CMS extensively at the company I work for,
-&lt;a href="http://www.pancentric.com/" title="Pancentric"&gt;Pancentric&lt;/a&gt;. I was recently
+&lt;a href="http://www.pancentric.com/"&gt;Pancentric&lt;/a&gt;. I was recently
 given what, at first, seemed to be a fairly simple request: ensure that
 any misspelled words are highlighted within the default text editor.&lt;/p&gt;
 &lt;p&gt;I'm fairly new to &lt;a href="http://ckeditor.com/" title="CKEditor"&gt;CKEditor&lt;/a&gt; and
@@ -109,10 +109,7 @@ features which make things... awkward. Spell checking is one of them.&lt;/p&gt;
 &lt;p&gt;The toolbar has a number of sensible defaults which can be seen in the
 image below.  Notice that, although the last three words are misspelled,
 there is no visual indication of this.&lt;/p&gt;
-&lt;p&gt;[caption id="attachment_136" align="alignnone" width="1008"]&lt;a href="http://niceguydave.files.wordpress.com/2014/09/toolbar_pre_config.png"&gt;&lt;img alt="Default
-CKEditor
-layout" src="http://niceguydave.files.wordpress.com/2014/09/toolbar_pre_config.png" /&gt;&lt;/a&gt;
-Default CKEditor layout[/caption]&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Default CKEditor layout" src="images/django_cms_toolbar_pre_config.png" /&gt;&lt;/p&gt;
 &lt;p&gt;You'll notice that what I &lt;em&gt;don't&lt;/em&gt; have here is either a spell-check
 button or the ability to see any misspelled words highlighted within the
 text editor itself.&lt;/p&gt;
@@ -160,11 +157,7 @@ which doesn't force me to install any additional spell checking plugins:&lt;/p&g
 &lt;p&gt;The final appearance of the editor after the changes have been made is
 as below.  Notice the final three nonsense words highlighted as
 misspelled (I'm using Chrome ):&lt;/p&gt;
-&lt;p&gt;[caption id="attachment_135" align="alignnone" width="1008"]&lt;a href="http://niceguydave.files.wordpress.com/2014/09/toolbar_post_config.png"&gt;&lt;img alt="CKEditor
-toolbar after configuring native browser spell
-checking" src="http://niceguydave.files.wordpress.com/2014/09/toolbar_post_config.png" /&gt;&lt;/a&gt;
-CKEditor toolbar after configuring native browser spell
-checking[/caption]&lt;/p&gt;</summary><category term="cms"></category><category term="django"></category><category term="django-cms"></category></entry><entry><title>Django - testing model methods</title><link href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="alternate"></link><updated>2014-04-25T09:10:00+01:00</updated><author><name>niceguydave</name></author><id>tag:niceguydave.com,2014-04-25:django-testing-for-integrity-errors.html</id><summary type="html">&lt;p&gt;I recently stumbled upon a "gotcha" which may help someone else testing
+&lt;p&gt;&lt;img alt="CKEditor toolbar after configuring native browser spell checking" src="images/django_cms_toolbar_post_config.png" /&gt;&lt;/p&gt;</summary><category term="cms"></category><category term="django"></category><category term="django-cms"></category></entry><entry><title>Django - testing model methods</title><link href="http://niceguydave.com/django-testing-for-integrity-errors.html" rel="alternate"></link><updated>2014-04-25T09:10:00+01:00</updated><author><name>niceguydave</name></author><id>tag:niceguydave.com,2014-04-25:django-testing-for-integrity-errors.html</id><summary type="html">&lt;p&gt;I recently stumbled upon a "gotcha" which may help someone else testing
 Django model methods.&lt;/p&gt;
 &lt;p&gt;An overview: I recently found myself in a situation where I needed to
 ensure that the &lt;code&gt;slug&lt;/code&gt; field on a model was unique.&lt;/p&gt;
