@@ -1,126 +1,100 @@
-<!DOCTYPE html>
+<?xml version="1.0" encoding="utf-8"?>
+<!doctype html>
 <html lang="en">
-<head>
+    <head>
+        <title>David Talbot <small>testing</small></title>
+
+        <!-- meta -->
         <meta charset="utf-8" />
-        <title>David Talbot - testing</title>
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" />
+        <meta name="author" content="David Talbot" />
+
+        <!-- Feeds -->
         <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
+        <!-- Style -->
+        <link href="https://fonts.googleapis.com/css?family=Linden+Hill:400,400italic" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" type="text/css" />
+        <link rel="shortcut icon" href="http://niceguydave.com/theme/favicon.ico" />
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="http://niceguydave.com/">David Talbot </a></h1>
-                <nav><ul>
-                    <li><a href="http://niceguydave.com/category/language.html">Language</a></li>
-                    <li><a href="http://niceguydave.com/category/web-development.html">Web development</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+        <!-- Google analytics -->
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="http://niceguydave.com/django-testing-for-integrity-errors.html">Django - testing model methods</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2014-04-25T09:10:00+01:00">
-                Published: Fri 25 April 2014
-        </abbr>
+    </head>
+    <body>
+        <div id="wrapper">
+          <div id="blogtitle">David Talbot</div>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="http://niceguydave.com/author/niceguydave.html">niceguydave</a>
-        </address>
-<p>In <a href="http://niceguydave.com/category/web-development.html">Web development</a>.</p>
-<p>tags: <a href="http://niceguydave.com/tag/django.html">django</a> <a href="http://niceguydave.com/tag/testing.html">testing</a> </p>
-</footer><!-- /.post-info --><p>I recently stumbled upon a "gotcha" which may help someone else testing
+          <!-- Blogroll -->
+          <ul id="mainnav">
+            <li><a href="/">Home</a></li>
+            <li><a href="http://python.org/">Python.org</a></li>
+          </ul>
+
+          <div class="clearboth"></div>
+          <div id="content">
+<section id="content">
+
+
+  <div class="row">
+    <div class=article-overview>
+      <div class=date>Fri 25 April 2014</div>
+      <div class=detail>
+        <h1><a href="http://niceguydave.com/django-testing-for-integrity-errors.html" title="Permalink to Django - testing model methods">Django - testing model methods</a></h1>
+        <div class=summary><p>I recently stumbled upon a "gotcha" which may help someone else testing
 Django model methods.</p>
 <p>An overview: I recently found myself in a situation where I needed to
 ensure that the <code>slug</code> field on a model was unique.</p>
 <p>A simplification of the model is as follows:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import ...</span></pre></div></div>
+      </div>
 
-<span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
-<span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="nb">max</span>\<span class="n">_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  
-<span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  
-</pre></div>
+      <!-- tags list -->
+	  <div class="tags">
+        <a class="tag" href="http://niceguydave.com/tag/django.html">django</a>
+        <a class="tag" href="http://niceguydave.com/tag/testing.html">testing</a>
+      </div>
+    </div>
+  </div><!-- /.row -->
 
+</section><!-- /#content -->
+          </div>
+        </div>
 
-<p>In terms of how to test this change to the model, my initial thoughts
-were that things should be fairly simple: create an object with a
-specific <code>slug</code> and then create another object with the same <code>slug</code>,
-expecting an <code>IntegrityError</code> to be raised. As such, my approach was to
-write the following:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>  
-<span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>  
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Foo</span>
-
-<span class="k">class</span> <span class="nc">FooModelTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">test_unique_slug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  
-    <span class="sd">&quot;&quot;&quot;A slug should be unique.  </span>
-<span class="sd">    &quot;&quot;&quot;</span>  
-    <span class="n">f1</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Foo1&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;foo1&quot;</span><span class="p">)</span>  
-    <span class="n">f1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  
-    <span class="n">f2</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Foo2&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;foo1&quot;</span><span class="p">)</span>  
-    <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="n">f2</span><span class="o">.</span><span class="n">save</span><span class="p">())</span>  
-</pre></div>
+        <!-- footer -->
+        <div class=footer>
+          <div class="textwidget">
 
 
-<p>However, rather than checking that the <code>IntegrityError</code> was being raised
-was being raised, the <code>IntegrityError</code> was called before the test could
-run.</p>
-<p>What had happened was that, rather than passing the <code>save</code> method itself
-to <code>self.assertRaises</code> I was calling <code>save()</code> directly: an
-<code>IntegrityError</code> was being raised before the test had even been run,
-rather than having the test itself check the <code>save</code> method in the
-assertion.</p>
-<p>To fix this, I removed the parentheses from <code>f2.save()</code> i.e.</p>
-<div class="highlight"><pre>...  
-self.assertRaises(IntegrityError, f2.save)  
-</pre></div>
+            <a alt="twitter" href="https://twitter.com/niceguydave"><img src="http://niceguydave.com/theme/button/badge_twitter.png" alt="twitter button" /></a>
 
 
-<p>then everything works exactly as expected.</p>                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h2>blogroll</h2>
-                        <ul>
-                            <li><a href="http://getpelican.com/">Pelican</a></li>
-                            <li><a href="http://python.org/">Python.org</a></li>
-                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-                            <li><a href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
 
-                            <li><a href="https://twitter.com/niceguydave">twitter</a></li>
-                            <li><a href="http://www.last.fm/user/squij">lastfm</a></li>
-                            <li><a href="https://github.com/niceguydave">github</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
 
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
 
-    <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-12339594-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = 'https://ssl.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-    </script>
-</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          </div>
+
+          <p>
+            Carburize with <a href="http://blog.getpelican.com">pelican</a></p>
+          <p><a href="https://github.com/badele/pelican-theme-jesuislibre">jesuislibre</a> theme, inspired by <a href="http://blog.dbrgn.ch">dbrng</a> blog</p>
+          <p><a href="http://bruno.adele.im">about author</a></p>
+      </div>
+
+
+     </body>
 </html>
