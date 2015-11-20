@@ -1,63 +1,10 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <title>Django - testing model methods</title>
-
-        <!-- meta -->
-        <meta charset="utf-8" />
-        <meta name="author" content="" />
-
-        <!-- Feeds -->
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
-
-        <!-- Style -->
-        <link href="https://fonts.googleapis.com/css?family=Linden+Hill:400,400italic" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" type="text/css" />
-        <link rel="shortcut icon" href="http://niceguydave.com/theme/favicon.ico" />
-
-        <!-- Google analytics -->
-
-    </head>
-    <body>
-        <div id="wrapper">
-          <div id="blogtitle"><a href="/">David Talbot</a></div>
-
-          <!-- Blogroll -->
-          <ul id="mainnav">
-            <li><a href="/">Home</a></li>
-            <li><a href="http://python.org/">Python.org</a></li>
-          </ul>
-
-          <div class="clearboth"></div>
-          <div id="content">
-
-<h1>Django - testing model methods</h1>
-<div class=date>Fri 25 April 2014
- / <span class="tags">
-  <a class="tag" href="http://niceguydave.com/tag/django.html">django</a>
-  <a class="tag" href="http://niceguydave.com/tag/testing.html">testing</a>
-</span>
-</div>
-
-<p>I recently stumbled upon a "gotcha" which may help someone else testing
-Django model methods.</p>
-<p>An overview: I recently found myself in a situation where I needed to
-ensure that the <code>slug</code> field on a model was unique.</p>
-<p>A simplification of the model is as follows:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<html lang="en"><head><title>Django - testing model methods</title><meta charset="utf-8"><meta name="author" content><link href="https://fonts.googleapis.com/css?family=Linden+Hill:400,400italic" rel="stylesheet" type="text/css"><link rel="stylesheet" href="./theme/css/main.css" type="text/css"><link rel="shortcut icon" href="./theme/favicon.ico"></head><body><div id="wrapper"><div id="blogtitle"><a href="/">David Talbot</a></div><ul id="mainnav"><li><a href="/">Home</a></li><li><a href="http://python.org/">Python.org</a></li></ul><div class="clearboth"></div><div id="content"><h1>Django - testing model methods</h1><div class="date">Fri 25 April 2014 / <span class="tags"><a class="tag" href="./tag/django.html">django</a><a class="tag" href="./tag/testing.html">testing</a></span></div><p>I recently stumbled upon a "gotcha" which may help someone else testing Django model methods.</p><p>An overview: I recently found myself in a situation where I needed to ensure that the <code>slug</code> field on a model was unique.</p><p>A simplification of the model is as follows:</p><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
 <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="nb">max</span>\<span class="n">_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>  
 <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  
-</pre></div>
-
-
-<p>In terms of how to test this change to the model, my initial thoughts
-were that things should be fairly simple: create an object with a
-specific <code>slug</code> and then create another object with the same <code>slug</code>,
-expecting an <code>IntegrityError</code> to be raised. As such, my approach was to
-write the following:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>  
+</pre></div><p>In terms of how to test this change to the model, my initial thoughts were that things should be fairly simple: create an object with a specific <code>slug</code> and then create another object with the same <code>slug</code>, expecting an <code>IntegrityError</code> to be raised. As such, my approach was to write the following:</p><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">IntegrityError</span>  
 <span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>  
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Foo</span>
 
@@ -70,70 +17,6 @@ write the following:</p>
     <span class="n">f1</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>  
     <span class="n">f2</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Foo2&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="o">=</span><span class="s">&quot;foo1&quot;</span><span class="p">)</span>  
     <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="n">f2</span><span class="o">.</span><span class="n">save</span><span class="p">())</span>  
-</pre></div>
-
-
-<p>However, rather than checking that the <code>IntegrityError</code> was being raised
-was being raised, the <code>IntegrityError</code> was called before the test could
-run.</p>
-<p>What had happened was that, rather than passing the <code>save</code> method itself
-to <code>self.assertRaises</code> I was calling <code>save()</code> directly: an
-<code>IntegrityError</code> was being raised before the test had even been run,
-rather than having the test itself check the <code>save</code> method in the
-assertion.</p>
-<p>To fix this, I removed the parentheses from <code>f2.save()</code> i.e.</p>
-<div class="highlight"><pre>...  
+</pre></div><p>However, rather than checking that the <code>IntegrityError</code> was being raised was being raised, the <code>IntegrityError</code> was called before the test could run.</p><p>What had happened was that, rather than passing the <code>save</code> method itself to <code>self.assertRaises</code> I was calling <code>save()</code> directly: an <code>IntegrityError</code> was being raised before the test had even been run, rather than having the test itself check the <code>save</code> method in the assertion.</p><p>To fix this, I removed the parentheses from <code>f2.save()</code> i.e.</p><div class="highlight"><pre>...  
 self.assertRaises(IntegrityError, f2.save)  
-</pre></div>
-
-
-<p>then everything works exactly as expected.</p>
-
-
-          </div>
-        </div>
-
-        <!-- footer -->
-        <div class=footer>
-          <div class="textwidget">
-
-
-            <a alt="twitter" href="https://twitter.com/niceguydave"><img src="http://niceguydave.com/theme/button/badge_twitter.png" alt="twitter button" /></a>
-
-
-
-
-
-
-
-
-
-            <a alt="Google +" rel="author" href="https://plus.google.com/u/0/+DavidTalbot1974"><img src="http://niceguydave.com/theme/button/badge_google+.png" alt="google + button" /></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          </div>
-
-      </div>
-
-
-     </body>
-</html>
+</pre></div><p>then everything works exactly as expected.</p></div></div><div class="footer"><div class="textwidget"><a alt="twitter" href="https://twitter.com/niceguydave"><img src="./theme/button/badge_twitter.png" alt="twitter button"></a><a alt="Google +" rel="author" href="https://plus.google.com/u/0/+DavidTalbot1974"><img src="./theme/button/badge_google+.png" alt="google + button"></a></div></div></body></html>

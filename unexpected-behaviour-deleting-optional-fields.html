@@ -1,75 +1,12 @@
 <!doctype html>
-<html lang="en">
-    <head>
-        <title>Django - unexpected behaviour when deleting optional fields</title>
-
-        <!-- meta -->
-        <meta charset="utf-8" />
-        <meta name="author" content="" />
-
-        <!-- Feeds -->
-        <link href="http://niceguydave.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="David Talbot Atom Feed" />
-
-        <!-- Style -->
-        <link href="https://fonts.googleapis.com/css?family=Linden+Hill:400,400italic" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="http://niceguydave.com/theme/css/main.css" type="text/css" />
-        <link rel="shortcut icon" href="http://niceguydave.com/theme/favicon.ico" />
-
-        <!-- Google analytics -->
-
-    </head>
-    <body>
-        <div id="wrapper">
-          <div id="blogtitle"><a href="/">David Talbot</a></div>
-
-          <!-- Blogroll -->
-          <ul id="mainnav">
-            <li><a href="/">Home</a></li>
-            <li><a href="http://python.org/">Python.org</a></li>
-          </ul>
-
-          <div class="clearboth"></div>
-          <div id="content">
-
-<h1>Django - unexpected behaviour when deleting optional fields</h1>
-<div class=date>Mon 24 August 2015
- / <span class="tags">
-  <a class="tag" href="http://niceguydave.com/tag/django.html">django</a>
-</span>
-</div>
-
-<p>I've just come out of a situation where data has been deleted from a site
-I'm responsible for - I wasn't expecting this to happen when writing the 
-schema so I thought it worthwhile adding here in the event that it helps
-anyone else who may be in the same situation</p>
-<p>The scenario was adding an optional field to to a Django <a href="http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield">FilerImageField</a>.</p>
-<p>A simplification of my model is as follows:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+<html lang="en"><head><title>Django - unexpected behaviour when deleting optional fields</title><meta charset="utf-8"><meta name="author" content><link href="https://fonts.googleapis.com/css?family=Linden+Hill:400,400italic" rel="stylesheet" type="text/css"><link rel="stylesheet" href="./theme/css/main.css" type="text/css"><link rel="shortcut icon" href="./theme/favicon.ico"></head><body><div id="wrapper"><div id="blogtitle"><a href="/">David Talbot</a></div><ul id="mainnav"><li><a href="/">Home</a></li><li><a href="http://python.org/">Python.org</a></li></ul><div class="clearboth"></div><div id="content"><h1>Django - unexpected behaviour when deleting optional fields</h1><div class="date">Mon 24 August 2015 / <span class="tags"><a class="tag" href="./tag/django.html">django</a></span></div><p>I've just come out of a situation where data has been deleted from a site I'm responsible for - I wasn't expecting this to happen when writing the schema so I thought it worthwhile adding here in the event that it helps anyone else who may be in the same situation</p><p>The scenario was adding an optional field to to a Django <a href="http://django-filer.readthedocs.org/en/latest/usage.html#filerfilefield-and-filerimagefield">FilerImageField</a>.</p><p>A simplification of my model is as follows:</p><div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
 <span class="o">...</span>
 
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
     <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>      
     <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                             <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">)</span>
-</pre></div>
-
-
-<p>My initial thoughts on this were, "it's an optional field so it shouldn't 
-matter whether the <code>image</code> instance referred to is deleted from the library.</p>
-<p>It does.</p>
-<p>When deleting anything, the default behaviour of any foreign keys 
-<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete">emulates the behavior of the SQL constraint ON DELETE 
-CASCADE</a>, 
-which is to say, even though an <code>image</code> exists in an instance of <code>Foo</code>, 
-and is optional, the fact that it has a foreign key relationship to the
-<code>FilerImageField</code> instance means that the <code>Foo</code> instance will, be default,
- be deleted.</p>
-<p>To resolve this issue, in my case, I changed the <code>on_delete</code> attribute for my
-<code>image</code> field to set the value of <code>image</code> to be
-<a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL">NULL</a> in the event that the 
-connected <code>FilerFieldImage</code> field were deleted.</p>
-<p>The code therefore was rewritten to look as follows:</p>
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
+</pre></div><p>My initial thoughts on this were, "it's an optional field so it shouldn't matter whether the <code>image</code> instance referred to is deleted from the library.</p><p>It does.</p><p>When deleting anything, the default behaviour of any foreign keys <a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.ForeignKey.on_delete">emulates the behavior of the SQL constraint ON DELETE CASCADE</a>, which is to say, even though an <code>image</code> exists in an instance of <code>Foo</code>, and is optional, the fact that it has a foreign key relationship to the <code>FilerImageField</code> instance means that the <code>Foo</code> instance will, be default, be deleted.</p><p>To resolve this issue, in my case, I changed the <code>on_delete</code> attribute for my <code>image</code> field to set the value of <code>image</code> to be <a href="https://docs.djangoproject.com/en/1.8/ref/models/fields/#django.db.models.SET_NULL">NULL</a> in the event that the connected <code>FilerFieldImage</code> field were deleted.</p><p>The code therefore was rewritten to look as follows:</p><div class="highlight"><pre><span class="kn">from</span> <span class="nn">filer.fields.image</span> <span class="kn">import</span> <span class="n">FilerImageField</span>
 <span class="o">...</span>
 
 <span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>  
@@ -77,53 +14,4 @@ connected <code>FilerFieldImage</code> field were deleted.</p>
     <span class="n">image</span> <span class="o">=</span> <span class="n">FilerImageField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                             <span class="n">help_text</span><span class="o">=</span><span class="s">&#39;Image should be at least 200 x 100px.&#39;</span><span class="p">,</span>
                             <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">)</span>
-</pre></div>
-
-
-          </div>
-        </div>
-
-        <!-- footer -->
-        <div class=footer>
-          <div class="textwidget">
-
-
-            <a alt="twitter" href="https://twitter.com/niceguydave"><img src="http://niceguydave.com/theme/button/badge_twitter.png" alt="twitter button" /></a>
-
-
-
-
-
-
-
-
-
-            <a alt="Google +" rel="author" href="https://plus.google.com/u/0/+DavidTalbot1974"><img src="http://niceguydave.com/theme/button/badge_google+.png" alt="google + button" /></a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          </div>
-
-      </div>
-
-
-     </body>
-</html>
+</pre></div></div></div><div class="footer"><div class="textwidget"><a alt="twitter" href="https://twitter.com/niceguydave"><img src="./theme/button/badge_twitter.png" alt="twitter button"></a><a alt="Google +" rel="author" href="https://plus.google.com/u/0/+DavidTalbot1974"><img src="./theme/button/badge_google+.png" alt="google + button"></a></div></div></body></html>
